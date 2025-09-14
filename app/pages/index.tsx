@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import Head from 'next/head';
 import {
     Box,
     Button,
@@ -396,6 +397,9 @@ export default function Home() {
 
     return (
         <Flex>
+            <Head>
+                <title>Lucia Playground</title>
+            </Head>
             <Box display={{ base: 'none', md: 'block' }} w="260px" p={6} minH="100vh" bgGradient={useColorModeValue('linear(to-b, pink.50, white)', 'linear(to-b, gray.900, #0b0226)')} color={textColor} borderRightWidth={useColorModeValue('1px', '0')}>
                 <VStack align="start" spacing={6}>
                     <HStack spacing={3} align="center">

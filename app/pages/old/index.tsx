@@ -1,6 +1,7 @@
 
 
 import React from 'react';
+import Head from 'next/head';
 
 export default function OldHome() {
   const html = `<!DOCTYPE html>
@@ -65,6 +66,9 @@ print(f"hello from {name}")
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
+      <Head>
+        <title>Lucia WASM (archived)</title>
+      </Head>
       <iframe
         title="Archived Lucia WASM"
         srcDoc={html}
