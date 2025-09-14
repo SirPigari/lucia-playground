@@ -44,6 +44,8 @@ jobs:
 
       - name: Build Next.js static site
         run: npm run build
+        env:
+          GITHUB_PAGES: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
