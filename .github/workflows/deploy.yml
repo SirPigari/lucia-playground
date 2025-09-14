@@ -16,6 +16,24 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # Cache node_modules
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Cache Next.js build output
+      - name: Cache Next.js .next
+        uses: actions/cache@v3
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-next-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-next-
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -24,13 +42,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build Next.js (static export)
-        run: |
-          npm run build
-          npm run export
-
-      - name: Copy wasm assets
-        run: cp -r ../web/pkg ./out/web/pkg
+      - name: Build Next.js static site
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -46,7 +59,6 @@ jobs:
 
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Deploy to GitHub Pages
