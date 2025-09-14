@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: 20
 
+      # Cache node_modules
       - name: Restore node_modules cache
         uses: actions/cache@v3
         with:
@@ -37,10 +38,11 @@ jobs:
         env:
           GITHUB_PAGES: true
 
-      - name: Cache Next.js build cache
+      # Cache the entire .next folder
+      - name: Cache Next.js build
         uses: actions/cache@v3
         with:
-          path: .next/cache
+          path: .next
           key: ${{ runner.os }}-next-${{ hashFiles('app/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-next-
