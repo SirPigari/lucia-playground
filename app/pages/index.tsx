@@ -39,7 +39,7 @@ import {
     DrawerCloseButton,
     useDisclosure,
 } from '@chakra-ui/react';
-import { Sun, Moon, Github, Package as PackageIcon, Box as BoxIcon, Cpu as CpuIcon, FileText as FileTextIcon, Play, Trash2, X } from 'lucide-react';
+import { Sun, Moon, Github, Package as PackageIcon, Box as BoxIcon, Cpu as CpuIcon, FileText as FileTextIcon, Play, Trash2, X, FolderOpen } from 'lucide-react';
 import AnsiUp from 'ansi_up';
 import dynamic from 'next/dynamic';
 import NextImage from 'next/image';
@@ -198,8 +198,6 @@ export default function Home() {
     const bgOutput = useColorModeValue('gray.50', 'gray.900');
     const textColor = useColorModeValue('gray.800', 'gray.100');
 
-    // If the user hasn't explicitly chosen a color mode (no stored key),
-    // default to the device/browser preference (prefers-color-scheme).
     useEffect(() => {
         try {
             if (typeof window === 'undefined') return;
@@ -207,16 +205,11 @@ export default function Home() {
             const stored = window.localStorage.getItem(storageKey);
             if (stored === null) {
                 const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                // toggleColorMode flips the current mode; only call when mismatch
                 if ((prefersDark && colorMode !== 'dark') || (!prefersDark && colorMode !== 'light')) {
                     toggleColorMode();
                 }
             }
-        } catch (e) {
-            // ignore
-        }
-        // run only once on mount
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        } catch (e) { }
     }, [toast]);
     const [fontScale, setFontScale] = useState(() => {
         try {
@@ -241,7 +234,7 @@ export default function Home() {
 
     useEffect(() => {
         (async () => {
-            const candidates = ['/lucia-playground/pkg/lucia_wasm.js', '/lucia-playground/pkg/lucia_wasm.js'];
+            const candidates = ['/lucia-playground/pkg/lucia_wasm.js', '/pkg/lucia_wasm.js'];
             let lastErr: any = null;
             for (const path of candidates) {
                 try {
@@ -672,6 +665,13 @@ export default function Home() {
                                 <HStack>
                                     <BoxIcon color={accentLight} size={16} />
                                     <Text fontSize="sm">Lym</Text>
+                                </HStack>
+                            </Link>
+
+                            <Link href="/lucia-playground/examples" _hover={{ textDecoration: 'none' }} color={accentLight}>
+                                <HStack>
+                                    <FolderOpen color={accentLight} size={16} />
+                                    <Text fontSize="sm">Lucia Playground</Text>
                                 </HStack>
                             </Link>
                         </HStack>
