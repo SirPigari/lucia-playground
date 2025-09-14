@@ -1,6 +1,5 @@
 app/.next/
 app/node_modules/
 app/tsconfig.tsbuildinfo
-app/package-lock.json
 web/
 index.html

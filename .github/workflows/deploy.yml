@@ -25,7 +25,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('app/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .next/cache
-          key: ${{ runner.os }}-next-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-next-${{ hashFiles('app/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-next-
 
