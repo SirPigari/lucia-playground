@@ -1,0 +1,314 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Lucia",
+    "scopeName": "source.lucia",
+    "fileTypes": [
+        "lc",
+        "lucia"
+    ],
+    "patterns": [
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#preprocessor"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#types"
+        },
+        {
+            "include": "#booleans"
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#macros"
+        },
+        {
+            "include": "#function-calls"
+        },
+        {
+            "include": "#numbers"
+        },
+        {
+            "include": "#operators"
+        },
+        {
+            "include": "#identifiers"
+        }
+    ],
+    "repository": {
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.line.double-slash.lucia",
+                    "match": "//.*$"
+                },
+                {
+                    "name": "comment.block.lucia",
+                    "begin": "/\\*",
+                    "end": "\\*/"
+                },
+                {
+                    "name": "comment.block.custom.lucia",
+                    "begin": "<#",
+                    "end": "#>"
+                }
+            ]
+        },
+        "macros": {
+            "patterns": [
+                {
+                    "name": "entity.name.function.macro.lucia",
+                    "begin": "\\b([a-zA-Z_][a-zA-Z0-9_]*)!\\s*\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "entity.name.function.macro.lucia"
+                        },
+                        "0": {
+                            "name": "punctuation.definition.parameters.begin.lucia"
+                        }
+                    },
+                    "end": "\\)",
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.parameters.end.lucia"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#comments"
+                        },
+                        {
+                            "include": "#strings"
+                        },
+                        {
+                            "include": "#booleans"
+                        },
+                        {
+                            "include": "#keywords"
+                        },
+                        {
+                            "include": "#function-calls"
+                        },
+                        {
+                            "include": "#macros"
+                        },
+                        {
+                            "include": "#numbers"
+                        },
+                        {
+                            "include": "#types"
+                        },
+                        {
+                            "include": "#operators"
+                        },
+                        {
+                            "include": "#identifiers"
+                        }
+                    ]
+                }
+            ]
+        },
+        "function-calls": {
+            "patterns": [
+                {
+                    "name": "entity.name.function.call.lucia",
+                    "begin": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "entity.name.function.call.lucia"
+                        },
+                        "0": {
+                            "name": "punctuation.definition.parameters.begin.lucia"
+                        }
+                    },
+                    "end": "\\)",
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.parameters.end.lucia"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#comments"
+                        },
+                        {
+                            "include": "#strings"
+                        },
+                        {
+                            "include": "#booleans"
+                        },
+                        {
+                            "include": "#keywords"
+                        },
+                        {
+                            "include": "#function-calls"
+                        },
+                        {
+                            "include": "#macros"
+                        },
+                        {
+                            "include": "#numbers"
+                        },
+                        {
+                            "include": "#types"
+                        },
+                        {
+                            "include": "#operators"
+                        },
+                        {
+                            "include": "#identifiers"
+                        }
+                    ]
+                }
+            ]
+        },
+        "operators": {
+            "patterns": [
+                {
+                    "name": "keyword.operator.lucia",
+                    "match": "(->|>=|<=|==|!=|\\+=|-=|\\*=|/=|=|<<|>>|\\+\\+|--|\\+|-|\\^|\\*|/|>|<|!|%|\\|\\||&&|\\||#|~|\\$|\\?|&|\\^=|%=|\\.\\.\\.|\\.\\.|[(){}\\[\\];:.,\\?])"
+                }
+            ]
+        },
+        "identifiers": {
+            "patterns": [
+                {
+                    "name": "variable.other.lucia",
+                    "match": "\\bnon-static\\b|\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+                },
+                {
+                    "include": "#strings"
+                },
+                {
+                    "include": "#function-args"
+                }
+            ]
+        },
+        "types": {
+            "patterns": [
+                {
+                    "name": "storage.type.lucia",
+                    "match": "\\b(void|any|int|float|bool|str|map|list|function|generator|bytes|tuple|auto|type|impl)\\b"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "name": "keyword.control.lucia",
+                    "match": "\\b(for|while|as|from|import|throw|end|catch|try|fun|return|static|non-static|public|private|final|mutable|if|else|then|in|forget|and|or|not|isnt|is(?:n't)?|xor|xnor|nein|match|break|continue|defer|scope|pass|band|lshift|rshift|bor|bnot|typedef|where|gen|export|struct|enum)\\b(?!\\s*=)"
+                }
+            ]
+        },
+        "numbers": {
+            "patterns": [
+                {
+                    "name": "constant.numeric.lucia",
+                    "match": "-?(\\d+\\#[0-9a-zA-Z_]+|0[bB][01]+(?:_[01]+)*|0[oO][0-7]+(?:_[0-7]+)*|0[xX][\\da-fA-F]+(?:_[\\da-fA-F]+)*|\\.\\d+(?:_\\d+)*|(?:\\d+(?:_\\d)*) (?:\\.\\d+(?:_\\d+)*)?(?:[eE][+-]?\\d+)?)"
+                }
+            ]
+        },
+        "booleans": {
+            "patterns": [
+                {
+                    "name": "constant.language.boolean.lucia",
+                    "match": "\\b(true|false|null)\\b"
+                }
+            ]
+        },
+        "strings": {
+            "patterns": [
+                {
+                    "name": "string.quoted.double.block.lucia",
+                    "begin": "(?i)([frb]{0,3})\"\"\"",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "string.quoted.double.lucia"
+                        }
+                    },
+                    "end": "\"\"\"",
+                    "patterns": [
+                        {
+                            "name": "constant.character.escape.lucia",
+                            "match": "\\\\."
+                        }
+                    ]
+                },
+                {
+                    "name": "string.quoted.single.block.lucia",
+                    "begin": "(?i)([frb]{0,3})'''",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "string.quoted.double.lucia"
+                        }
+                    },
+                    "end": "'''",
+                    "patterns": [
+                        {
+                            "name": "constant.character.escape.lucia",
+                            "match": "\\\\."
+                        }
+                    ]
+                },
+                {
+                    "name": "string.quoted.double.raw.lucia",
+                    "begin": "(?i)r\"",
+                    "end": "\"",
+                    "contentName": "string.raw.lucia"
+                },
+                {
+                    "name": "string.quoted.single.raw.lucia",
+                    "begin": "(?i)r'",
+                    "end": "'",
+                    "contentName": "string.raw.lucia"
+                },
+                {
+                    "name": "string.quoted.double.lucia",
+                    "begin": "(?i)([fb]{0,2})\"",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "string.quoted.double.lucia"
+                        }
+                    },
+                    "end": "\"",
+                    "patterns": [
+                        {
+                            "name": "constant.character.escape.lucia",
+                            "match": "\\\\."
+                        }
+                    ]
+                },
+                {
+                    "name": "string.quoted.single.lucia",
+                    "begin": "(?i)([fb]{0,2})'",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "string.quoted.double.lucia"
+                        }
+                    },
+                    "end": "'",
+                    "patterns": [
+                        {
+                            "name": "constant.character.escape.lucia",
+                            "match": "\\\\."
+                        }
+                    ]
+                }
+            ]
+        },
+        "preprocessor": {
+            "patterns": [
+                {
+                    "name": "keyword.preprocessor.lucia",
+                    "match": "(#(?:\\w+(?:-\\w+)?)(?:\\s+#(?:\\w+(?:-\\w+)?))*)\\b"
+                }
+            ]
+        }
+    }
+}

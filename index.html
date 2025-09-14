@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Lucia WASM</title>
+</head>
+
+<body>
+    <h1>Lucia WASM playground</h1>
+
+    <textarea id="code" rows="10" cols="80">// write some lucia code here
+name := "Lucia"
+print(f"hello from {name}")
+    </textarea>
+    <br>
+    <button id="runBtn">Run</button>
+
+    <pre id="output"></pre>
+
+    <script type="module">
+        import init, { run_code_wasm_no_config, set_print_callback, set_clear_callback } from "./web/pkg/lucia_wasm.js";
+
+        async function runLucia() {
+            const code = document.getElementById("code").value;
+
+            try {
+                await run_code_wasm_no_config(code);
+            } catch (e) {
+                appendOutput("Error: " + e);
+            }
+        }
+
+        const outputElem = document.getElementById("output");
+
+        function appendOutput(text) {
+            outputElem.textContent += text + "\n";
+        }
+
+        init().then(() => {
+            console.log("Lucia WASM loaded");
+
+            set_print_callback((msg) => appendOutput(msg));
+            set_clear_callback(() => outputElem.textContent = "");
+        });
+
+        document.getElementById("runBtn").addEventListener("click", runLucia);
+    </script>
+</body>
+
+</html>
