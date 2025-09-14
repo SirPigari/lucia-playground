@@ -241,7 +241,7 @@ export default function Home() {
 
     useEffect(() => {
         (async () => {
-            const candidates = ['/api/pkg/web/pkg/lucia_wasm.js', '/api/pkg/pkg/lucia_wasm.js'];
+            const candidates = ['/pkg/lucia_wasm.js', '/pkg/lucia_wasm.js'];
             let lastErr: any = null;
             for (const path of candidates) {
                 try {

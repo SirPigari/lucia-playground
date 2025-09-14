@@ -35,7 +35,7 @@ print(f"hello from {name}")
       (async function(){
         try {
           // runtime import from the API route; webpack should ignore this
-          const mod = await import(/* webpackIgnore: true */ '/api/pkg/web/pkg/lucia_wasm.js');
+          const mod = await import(/* webpackIgnore: true */ '/pkg/lucia_wasm.js');
 
           function appendOutput(text){
             const outputElem = document.getElementById('output');
