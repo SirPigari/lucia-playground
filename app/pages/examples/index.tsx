@@ -99,7 +99,7 @@ export default function ExamplesPage() {
                 }
             }
         } catch (e) { }
-    }, [toast]);
+    }, [toast, colorMode, toggleColorMode]);
     const [fontScale, setFontScale] = useState(() => {
         try {
             if (typeof window !== 'undefined') {
@@ -474,7 +474,7 @@ export default function ExamplesPage() {
 
                     <VStack spacing={6} align="stretch">
                         {examples.map((ex) => (
-                            <Box key={ex.id} borderWidth={1} borderRadius="md" p={4} bg={useColorModeValue('white', 'gray.800')}>
+                            <Box key={ex.id} borderWidth={1} borderRadius="md" p={4} bg={bgOutput}>
                                 <HStack justify="space-between">
                                     <Text fontWeight={700}>{ex.desc}</Text>
                                     <HStack spacing={2}>

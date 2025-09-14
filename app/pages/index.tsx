@@ -210,7 +210,7 @@ export default function Home() {
                 }
             }
         } catch (e) { }
-    }, [toast]);
+    }, [toast, colorMode, toggleColorMode]);
     const [fontScale, setFontScale] = useState(() => {
         try {
             if (typeof window !== 'undefined') {
