@@ -404,7 +404,7 @@ export default function Home() {
                 <VStack align="start" spacing={6}>
                     <HStack spacing={3} align="center">
                         <Box p={0} borderRadius="md" overflow="hidden" boxSize="40px">
-                            <NextImage src="/icon.svg" alt="Lucia" width={40} height={40} />
+                            <NextImage src="/lucia-playground/icon.svg" alt="Lucia" width={40} height={40} />
                         </Box>
                         <VStack align="start" spacing={0}>
                             <Heading size="sm">Lucia</Heading>
@@ -477,7 +477,7 @@ export default function Home() {
                     <DrawerHeader>
                         <HStack spacing={3} align="center">
                             <Box p={0} borderRadius="md" overflow="hidden" boxSize="32px">
-                                <NextImage src="/icon.svg" alt="Lucia" width={32} height={32} />
+                                <NextImage src="/lucia-playground/icon.svg" alt="Lucia" width={32} height={32} />
                             </Box>
                             <VStack align="start" spacing={0}>
                                 <Heading size="xs">Lucia</Heading>
