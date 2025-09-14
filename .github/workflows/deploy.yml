@@ -16,28 +16,18 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # Cache node_modules
-      - name: Cache node_modules
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Restore node_modules cache
         uses: actions/cache@v3
         with:
           path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
-      # Cache Next.js build output
-      - name: Cache Next.js .next
-        uses: actions/cache@v3
-        with:
-          path: .next/cache
-          key: ${{ runner.os }}-next-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-next-
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
 
       - name: Install dependencies
         run: npm install
@@ -46,6 +36,14 @@ jobs:
         run: npm run build
         env:
           GITHUB_PAGES: true
+
+      - name: Cache Next.js build cache
+        uses: actions/cache@v3
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-next-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-next-
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
