@@ -671,7 +671,7 @@ export default function Home() {
                             <Link href="/lucia-playground/examples" _hover={{ textDecoration: 'none' }} color={accentLight}>
                                 <HStack>
                                     <FolderOpen color={accentLight} size={16} />
-                                    <Text fontSize="sm">Lucia Playground</Text>
+                                    <Text fontSize="sm">Lucia Examples</Text>
                                 </HStack>
                             </Link>
                         </HStack>

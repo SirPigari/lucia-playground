@@ -32,7 +32,7 @@ import {
     DrawerCloseButton,
     useDisclosure,
 } from '@chakra-ui/react';
-import { Sun, Moon, Github, Package as PackageIcon, Box as BoxIcon, Cpu as CpuIcon, Code, FileText as FileTextIcon, Play, Trash2, X } from 'lucide-react';
+import { Sun, Moon, Github, Package as PackageIcon, Box as BoxIcon, Cpu as CpuIcon, Code, FileText as FileTextIcon, Play, Trash2, Link as LucideLink } from 'lucide-react';
 import AnsiUp from 'ansi_up';
 import dynamic from 'next/dynamic';
 import NextImage from 'next/image';
@@ -49,10 +49,11 @@ type Example = {
     id: string;
     desc: string;
     code: string;
+    link?: [string, string];
 };
 
 const EXAMPLES: Example[] = [
-    { id: 'for-loop', desc: 'For loops are declared with the "for" keyword. Each block in lucia ends with the "end" keyword.\nThe "[x..y]" syntax is used to create a range of values. It returns a generator. The range is always inclusive and you can specify the step by "[y, step..x]".\n\nTry changing the code a bit to see how it behaves.', code: 'for i in [1..5]:\n    print(i)\nend' },
+    { id: 'for-loop', desc: 'For loops are declared with the "for" keyword. Each block in lucia ends with the "end" keyword.\nThe "[x..y]" syntax is used to create a range of values. It returns a generator. The range is always inclusive, and you can specify the next value using "[y, next..x]". The step is implicitly calculated as "| next - y |".\n\nTry changing the code a bit to see how it behaves.', code: 'for i in [1..5]:\n    print(i)\nend' },
     { id: 'variable-decl', desc: 'You can declare variables two different ways. One way, the most often used, is with the ":=" syntax. This is used for auto type inference. The other way is with the "x: T" syntax. This is used for explicit variable types.\n\nSome of the types are: int, str, float, bool, void, any...\n\nWhen the value is missing (so no "=") it assign to the default value of the type or null if no default was found.', code: 'x := 10\nname: str = "Lucia"\nempty: void  // null\n\n// print em all\nprint(x, name, empty, sep=", ")' },
     { id: 'variable-assign', desc: 'You can assign values to variables like in any other language. Just use the "=".\n\nTry  commenting out the first line to see what happens.', code: 'state := "running"\nprint(state)\nstate = "paused"\nprint(state)\n' },
     { id: 'function-decl', desc: 'Functions are declared with the "fun" keyword. Each function has a name, a list of parameters, return type, and a body.\n\nReturn type can be omitted, in which case it defaults to "any".', code: 'fun greet(name: str):\n    print(f"Hello, {name}!")\nend\n\ngreet("Lucia")\n\nfun add(a: int, b: int) -> int:\n    return a + b\nend\n\nprint(add(6, 7))' },
@@ -62,7 +63,7 @@ const EXAMPLES: Example[] = [
     { id: 'map', desc: 'Maps are collections of key-value pairs. Keys are unique and can be of any type. Values can be of any type as well.', code: 'person := {"name": "Alice", "age": 30, "city": "New York"}\nprint(person)\n\n// Accessing values\nprint(person["name"])\n\n// Adding a new key-value pair\nperson["job"] = "Engineer"\nprint(person)\n\n// Iterating over keys and values\nfor (key in person.keys()):\n    print(f"{key}: {person[key]}")\nend' },
     { id: 'error-handling', desc: 'Errors can be handled with the "try" keyword. The code inside the "try" block is executed, and if an error occurs, the code inside the "catch" block is executed.\n\nThe error tuple is available as "e" inside the catch block.', code: 'fun divide(a: int, b: int) -> float:\n    return (a / b) as float\nend\n\ntry:\n    result := divide(10, 0)\n    print(f"Result: {result}")\ncatch (e):\n    print(f"Error occurred: {e}")\nend\n\ntry:\n    result := divide(10, 5)\n    print(f"Result: {result}")\ncatch (err_type, err_msg):\n    print(f"Error occurred: {err_type}: {err_msg}")\nend' },
     { id: 'import', desc: 'You can import standard library modules with the "import" keyword. \n\nSome of the available modules are: random, math, time, os, regex, json...\n\nYou can also import specific functions or variables from a module with the "from" keyword.\n\nSleeping is simulated in WASM because js is single threaded.', code: 'import random\nimport math\nimport (sleep) from time\n\n// Random integer between 1 and 100\nlucky_number := random.randint(1, 100)\nprint(f"Your lucky number is: {lucky_number}")\n\n// Square root of 16\nprint(f"Square root of 16 is: {math.sqrt(16)}")\n\nfor i in [1..5]:\n    sleep(500) // in milliseconds\n    print(i)\nend' },
-    { id: 'macro', desc: 'Macros are a way to define reusable code snippets. They are declared with the "#macro" directive. Macros can take parameters and can be called like functions, but they are expanded at preprocessor time.\n\nThis example defines a simple logging macro that prints a message with a timestamp.', code: 'import time\n\n#macro log($message):\n    print(f"[{time.format(\'%Y-%m-%d %H:%M:%S\')}] $message$")\n#endmacro\n\nlog!("This is a log message.")\nlog!("Another log entry.")\n' },
+    { id: 'macro', desc: 'Macros are a way to define reusable code snippets. They are declared with the "#macro" directive. Macros can take parameters and can be called like functions, but they are expanded at preprocessor time.\n\nThis example defines a simple logging macro that prints a message with a timestamp.', code: 'import time\n\n#macro log($message):\n    print(f"[{time.format(\'%Y-%m-%d %H:%M:%S\')}] $message$")\n#endmacro\n\nlog!("This is a log message.")\nlog!("Another log entry.")\n', link: ['https://github.com/SirPigari/lucia-rust/blob/main/tests/15_macros.lc', 'Macro examples'] },
 ];
 
 export default function ExamplesPage() {
@@ -475,14 +476,45 @@ export default function ExamplesPage() {
                     <VStack spacing={6} align="stretch">
                         {examples.map((ex) => (
                             <Box key={ex.id} borderWidth={1} borderRadius="md" p={4} bg={bgOutput}>
-                                <HStack justify="space-between">
+                                <HStack justify="space-between" align="start">
                                     <Text fontWeight={700}>{ex.desc}</Text>
-                                    <HStack spacing={2}>
-                                        <Button size="sm" leftIcon={<Play />} colorScheme="blue" onClick={() => runExample(ex.id, codes[ex.id])} isDisabled={!isReady}>
-                                            Run
-                                        </Button>
-                                        <IconButton aria-label={`Clear output ${ex.id}`} size="sm" icon={<Trash2 />} onClick={() => clearOutputFor(ex.id)} />
-                                    </HStack>
+
+                                    <VStack spacing={1} align="end">
+                                        <HStack spacing={2}>
+                                            <Button
+                                                size="sm"
+                                                leftIcon={<Play />}
+                                                colorScheme="blue"
+                                                onClick={() => runExample(ex.id, codes[ex.id])}
+                                                isDisabled={!isReady}
+                                            >
+                                                Run
+                                            </Button>
+                                            <IconButton
+                                                aria-label={`Clear output ${ex.id}`}
+                                                size="sm"
+                                                icon={<Trash2 />}
+                                                onClick={() => clearOutputFor(ex.id)}
+                                            />
+                                        </HStack>
+
+                                        {ex.link && (
+                                            <Link
+                                                href={ex.link[0]}
+                                                isExternal
+                                                display="inline-flex"
+                                                alignItems="center"
+                                                color="blue.500"
+                                                mt={1}
+                                                whiteSpace="nowrap"
+                                                overflow="hidden"
+                                                textOverflow="ellipsis"
+                                            >
+                                                <LucideLink size={16} style={{ marginRight: 4 }} />
+                                                {ex.link[1]}
+                                            </Link>
+                                        )}
+                                    </VStack>
                                 </HStack>
 
                                 <Box mt={3}>
