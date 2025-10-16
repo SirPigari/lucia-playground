@@ -179,6 +179,16 @@ export default function Home() {
     const [code, setCode] = useState(() => {
         try {
             if (typeof window !== 'undefined') {
+                const urlParams = new URLSearchParams(window.location.search);
+                const inputParam = urlParams.get('input');
+                if (inputParam) {
+                    try {
+                        return decodeURIComponent(inputParam);
+                    } catch (e) {
+                        console.warn('Failed to decode input parameter:', e);
+                    }
+                }
+                
                 const saved = window.localStorage.getItem('lucia_playground_code');
                 if (saved) return saved;
             }
