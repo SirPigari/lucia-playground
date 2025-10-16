@@ -52,128 +52,6 @@ declare global {
 
 const CodeEditor = dynamic(() => import('../components/CodeEditor'), { ssr: false });
 
-const STD_MACROS = `
-// std/macros.lc
-// This file contains macros for the Lucia programming language's standard library.
-#ifndef LUCIA_STD_MACROS
-#define LUCIA_STD_MACROS
-
-import collections as _collections
-import config as _config
-import time as _time
-
-
-// macro definitions can have a additional '!' after the name but its optional
-// i added it because i was forgeting if it was there or not
-//           V - here could be a '!'
-#macro assert($cond, $msg=("Assertion failed")):
-    if (!$cond):
-        throw $msg from "AssertionError"
-    end
-#endmacro
-
-// in macro f-strings you can use the $arg$ for the value of the arg
-// gets replaced by {arg_value} in the string
-// also the string MUST be f-string, otherwise it will not work
-#macro assert_eq($a, $b, $msg=(f"Values are not equal, expected: $b$, got: $a$")):
-    if (($a) != ($b)):
-        throw $msg from "AssertionError"
-    end
-#endmacro
-
-#macro assert_approx_eq($a, $b, $epsilon=(0.000001), $msg=(f"Values are not approximately equal, expected: $b$, got: $a$ (within $epsilon$)")):
-    if ((|($a) - ($b)|) > $epsilon):
-        throw $msg from "AssertionError"
-    end
-#endmacro
-
-
-#macro assert_ne($a, $b, $msg=(f"Values are equal but should not be, expected: $b$, got: $a$")):
-    if (($a) == ($b)):
-        throw $msg from "AssertionError"
-    end
-#endmacro
-
-#macro assert_err($expr, $msg=("Expected an error but got success")):
-    // smallest assert err macro i could come up with
-    // you could argue that the before ones were more readable, but this is the smallest
-    //               | --------------------- wrapping into a group
-    //               V                      V -- using '? or' to check if error, on error return the error tuple
-    result: ?tuple = \\ ($expr) return null \\? or _err
-    // if result is null (which can be only if it doesnt fail) then throw the error
-    if (result.is_null()) then throw $msg from "AssertionError"
-    // forget and return the error tuple
-    forget result
-#endmacro
-
-#macro assert_type($value, $type_, $msg=(f"Type mismatch")):
-    // innit?
-    if ($value isn't $type_):
-        throw $msg from "TypeError"
-    end
-#endmacro
-
-#macro unreachable($msg=("Entered unreachable code")):
-    throw $msg from "UnreachableError"
-#endmacro
-
-#macro todo($msg=("Not implemented yet")):
-    throw $msg from "NotImplemented"
-#endmacro
-
-#macro dbg($value...):
-    // when a variadic arg in macros is used, the value of it isnt a tuple or a list, its just the values separated by commas
-    // its on the macro to decide the type
-    // here we use a list (denoted by the [])
-    values: list = [$value]
-    mutable output: str = ""  // output builder 
-    for ((i, n) in values.enumerate()):
-        // $!value means the stringified version of the value tokens
-        // split by backticks to get the identifiers (backticks aren't used in lucia)
-        output += $!;value.split(";")[i].trim() + " = " + _collections.format_value(n).trim() + "\n\r"
-    end
-    forget values
-    print(output, end = "")
-    null  // otherwise it will return the last value (values)
-#endmacro
-
-#macro dbglog($value):
-    styledprint($value, fg_color = _config.color_scheme["debug"])
-#endmacro
-
-// TODO: Fix apollo time in time module (src/env/libs/time/__init__.rs)
-#macro time_it($expr):
-    scope time_it_scope(_time):
-        start_time: int = _time.current_apollo_time()
-        result: any = ($expr)
-        end_time: int = _time.current_apollo_time()
-        elapsed: int = end_time - start_time
-        return ((result, elapsed))
-    end
-#endmacro
-
-#macro stringify($value):
-    if ($value is str):
-        return $value
-    else:
-        return _collections.format_value($value)
-    end
-#endmacro
-
-#macro stringify_tokens($tokens):
-    return $!tokens
-#endmacro
-
-#macro range($a, $b = (null), $step = (1)):
-    return _collections.range($a, $b, $step)
-#endmacro
-
-// return null
-null
-
-#endif
-`;
-
 export default function Home() {
     const [outputHtml, setOutputHtml] = useState('');
     const [code, setCode] = useState(() => {
@@ -367,7 +245,7 @@ export default function Home() {
             const cfg = wasmRef.current.get_default_config();
             cfg.supports_color = true;
             cfg.type_checker.enabled = true;
-            let final_code = STD_MACROS.replace(/\r\n/g, "\n") + '\n\n\n' + code.replace(/\r\n/g, "\n");
+            let final_code = code.replace(/\r\n/g, "\n");
             await wasmRef.current.run_code_wasm(final_code, cfg);
         } catch (e) {
             setOutputHtml((o) => o + 'Error: ' + String(e) + '\n');
