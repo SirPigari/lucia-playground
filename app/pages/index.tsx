@@ -66,7 +66,7 @@ export default function Home() {
                         console.warn('Failed to decode input parameter:', e);
                     }
                 }
-                
+
                 const saved = window.localStorage.getItem('lucia_playground_code');
                 if (saved) return saved;
             }
@@ -163,6 +163,13 @@ export default function Home() {
                         wasmModule.set_clear_callback(() => {
                             outputRef.current = '';
                             setOutputHtml('');
+                        });
+                    }
+
+                    if (typeof wasmModule.set_input_callback === 'function') {
+                        wasmModule.set_input_callback(() => {
+                            const input = window.prompt('Input required by Lucia program:');
+                            return input ?? '';
                         });
                     }
 

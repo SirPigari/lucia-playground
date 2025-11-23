@@ -2,4 +2,5 @@ app/.next/
 app/node_modules/
 app/tsconfig.tsbuildinfo
 web/
+pkg/
 index.html

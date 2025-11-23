@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export function set_print_callback(cb: Function): void;
+export function set_input_callback(cb: Function): void;
 export function set_clear_callback(cb: Function): void;
 export function set_panic_hook(): void;
 export function get_default_config(): any;
@@ -13,6 +14,7 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly set_print_callback: (a: any) => void;
+  readonly set_input_callback: (a: any) => void;
   readonly set_clear_callback: (a: any) => void;
   readonly set_panic_hook: () => void;
   readonly get_default_config: () => any;
@@ -20,15 +22,15 @@ export interface InitOutput {
   readonly get_lucia_version: () => [number, number];
   readonly run_code_wasm_no_config: (a: number, b: number) => void;
   readonly main: (a: number, b: number) => number;
+  readonly wasm_bindgen__convert__closures_____invoke__h90bfc0c15aa37fa6: (a: number, b: number) => void;
+  readonly wasm_bindgen__closure__destroy__h0aebf841429b34d3: (a: number, b: number) => void;
+  readonly wasm_bindgen__convert__closures_____invoke__heed05ecafa351450: (a: number, b: number, c: any) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_exn_store: (a: number) => void;
   readonly __externref_table_alloc: () => number;
-  readonly __wbindgen_export_4: WebAssembly.Table;
-  readonly __wbindgen_export_5: WebAssembly.Table;
+  readonly __wbindgen_externrefs: WebAssembly.Table;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;
-  readonly wasm_bindgen__convert__closures_____invoke__h289a5d4c34905903: (a: number, b: number) => void;
-  readonly closure279_externref_shim: (a: number, b: number, c: any) => void;
   readonly __wbindgen_start: () => void;
 }
 
