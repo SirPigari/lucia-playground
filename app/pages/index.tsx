@@ -39,7 +39,7 @@ import {
     DrawerCloseButton,
     useDisclosure,
 } from '@chakra-ui/react';
-import { Sun, Moon, Github, Package as PackageIcon, Box as BoxIcon, Cpu as CpuIcon, FileText as FileTextIcon, Play, Trash2, X, FolderOpen } from 'lucide-react';
+import { Sun, Moon, Github, Package as PackageIcon, Box as BoxIcon, Cpu as CpuIcon, FileText as FileTextIcon, Play, Trash2, X, FolderOpen, ArrowUpRight } from 'lucide-react';
 import AnsiUp from 'ansi_up';
 import dynamic from 'next/dynamic';
 import NextImage from 'next/image';
@@ -86,6 +86,20 @@ export default function Home() {
     const bgOutput = useColorModeValue('gray.50', 'gray.900');
     const textColor = useColorModeValue('gray.800', 'gray.100');
 
+    const [shareUrl, setShareUrl] = useState("#");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.set("input", encodeURIComponent(code));
+                setShareUrl(url.toString());
+            } catch (e) {
+                console.error("Failed to generate share URL", e);
+            }
+        }
+    }, [code]);
+
     useEffect(() => {
         try {
             if (typeof window === 'undefined') return;
@@ -122,7 +136,7 @@ export default function Home() {
 
     useEffect(() => {
         (async () => {
-            const candidates = ['/lucia-playground/pkg/lucia_wasm.js', '/pkg/lucia_wasm.js', '/lucia-playground/pkg/lucia_wasm_bg.js', '/pkg/lucia_wasm_bg.js'];
+            const candidates = ['/lucia-playground/pkg/lucia_wasm.js', '/pkg/lucia_wasm.js'];
             let lastErr: any = null;
             for (const path of candidates) {
                 try {
@@ -474,7 +488,23 @@ export default function Home() {
                     </HStack>
 
                     <Box>
-                        <Text mb={2}>Code</Text>
+                        <HStack justify="left" mb={2}>
+                            <Text>Code</Text>
+                            <IconButton
+                                aria-label="Share"
+                                icon={<ArrowUpRight size={12} />}
+                                as="a"
+                                href={shareUrl}
+                                target="_blank"
+                                h="auto"
+                                w="auto"
+                                minW={0}
+                                p={0}
+                                variant="ghost"
+                                title="Share code via URL"
+                            />
+
+                        </HStack>
                         <CodeEditor
                             value={code}
                             fontSize={Math.round(13 * fontScale)}
